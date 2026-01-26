@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Header</title>
+</head>
+<body>
+<!-- Navigation bar fragment -->
+<nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/app/books">📚 Library System</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <!-- Show these links only if user is logged in -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/app/books">Books</a>
+                </li>
+            </ul>
+
+            <!-- Right side of navbar -->
+            <ul class="navbar-nav">
+                <!-- Show username and logout if logged in -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <span class="navbar-text me-3">
+                            Welcome, <span sec:authentication="name">User</span>
+                            <span class="badge bg-light text-dark ms-1" sec:authentication="principal.authorities">ROLE</span>
+                        </span>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                    </form>
+                </li>
+
+                <!-- Show login link if not logged in -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>
+</html>

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: library_postgres
+    environment:
+      # Kredencialet e databazës - duhet të përputhen me application.properties
+      POSTGRES_DB: library_db           # Emri i databazës
+      POSTGRES_USER: library_user       # Username
+      POSTGRES_PASSWORD: library_pass   # Password
+    ports:
+      # Ekspozon PostgreSQL në port 5432
+      - "5432:5432"
+    volumes:
+      # Ruan të dhënat edhe pas ndaljes së container-it
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+# Volume për të ruajtur të dhënat e databazës
+volumes:
+  postgres_data:
+    driver: local
