@@ -14,13 +14,14 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <!-- Show these links only if user is logged in -->
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="/app/books">Books</a>
-                </li>
-            </ul>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/app/books">Books</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/app/authors">Authors</a>
+            </li>
+        </ul>
 
             <!-- Right side of navbar -->
             <ul class="navbar-nav">

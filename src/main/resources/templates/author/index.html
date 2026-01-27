@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{shared/layout :: layout(content=~{::content}, pageTitle='Authors')}">
+<head>
+    <title>Authors</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>👨‍💼 Authors</h2>
+        <!-- Butoni "Add New Author" vetëm për ADMIN -->
+        <a href="/app/authors/new"
+           class="btn btn-primary"
+           sec:authorize="hasRole('ADMIN')">
+            ➕ Add New Author
+        </a>
+    </div>
+
+    <!-- Authors table -->
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${authors.isEmpty()}" class="text-center text-muted py-5">
+                <p class="mb-0">No authors found.</p>
+            </div>
+
+            <table th:if="${!authors.isEmpty()}" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Number of Books</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="author : ${authors}">
+                    <td th:text="${author.id}">1</td>
+                    <td th:text="${author.name}">Author Name</td>
+                    <td>
+                        <span class="badge bg-info" th:text="${author.books.size()}">0</span>
+                    </td>
+                    <td>
+                        <!-- Edit button - VETËM për ADMIN -->
+                        <a th:href="@{/app/authors/edit/{id}(id=${author.id})}"
+                           class="btn btn-sm btn-warning"
+                           sec:authorize="hasRole('ADMIN')">
+                            ✏️ Edit
+                        </a>
+
+                        <!-- Delete button - TE GJITHE e shohin, por vetëm ADMIN e përdorin -->
+                        <form th:action="@{/app/authors/delete/{id}(id=${author.id})}"
+                              method="post"
+                              class="d-inline"
+                              onsubmit="return confirm('Delete this author? This will also delete all their books!');">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                🗑️ Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3 text-muted">
+        <small>Total authors: <strong th:text="${authors.size()}">0</strong></small>
+    </div>
+</div>
+</body>
+</html>

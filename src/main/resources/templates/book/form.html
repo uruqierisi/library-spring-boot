@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{shared/layout :: layout(content=~{::content}, pageTitle=${book.id != null ? 'Edit Book' : 'New Book'})}">
 <head>
     <title>Book Form</title>
@@ -63,10 +64,16 @@
                             </select>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}"
                                  th:errors="*{author}">Author error</div>
+
+                            <!-- Quick link to add new author -->
+                            <small class="form-text text-muted" sec:authorize="hasRole('ADMIN')">
+                                Author not in list?
+                                <a href="/app/authors/new" target="_blank" class="text-primary">Add new author</a>
+                            </small>
                         </div>
 
                         <!-- Buttons -->
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between mt-4">
                             <a href="/app/books" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary">
                                 <span th:text="${book.id != null ? 'Update Book' : 'Create Book'}">Submit</span>
