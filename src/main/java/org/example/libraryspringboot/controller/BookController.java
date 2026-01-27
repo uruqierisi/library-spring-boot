@@ -25,6 +25,7 @@ public class BookController {
     @Autowired
     private AuthorService authorService;
 
+
     @GetMapping
     public String listBooks(@RequestParam(required = false) String search, Model model){
         List<Book> books;
@@ -42,21 +43,19 @@ public class BookController {
 
 
     @GetMapping("/new")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showCreateForm(Model model) {
         model.addAttribute("book", new Book());
-
         model.addAttribute("authors", authorService.getAllAuthors());
-
         return "book/form";
     }
 
     @PostMapping
-    public String createBook(@Valid @ModelAttribute Book book, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-
-        // Kontrollo nëse ISBN ekziston
-        if (bookService.isIsbnExists(book.getIsbn())) {
-            result.rejectValue("isbn", "error.book", "ISBN already exists");
-        }
+    @PreAuthorize("hasRole('ADMIN')")
+    public String createBook(@Valid @ModelAttribute Book book,
+                             BindingResult result,
+                             Model model,
+                             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()){
             model.addAttribute("authors", authorService.getAllAuthors());
@@ -64,13 +63,12 @@ public class BookController {
         }
 
         bookService.saveBook(book);
-
         redirectAttributes.addFlashAttribute("success", "Book created successfully!");
-
         return "redirect:/app/books";
     }
 
     @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showEditForm(@PathVariable Long id, Model model){
         Book book = bookService.getBookById(id);
 
@@ -80,25 +78,28 @@ public class BookController {
 
         model.addAttribute("book", book);
         model.addAttribute("authors", authorService.getAllAuthors());
-
         return "book/form";
     }
 
     @PostMapping("/{id}")
-    public String updateBook(@PathVariable Long id, @Valid @ModelAttribute Book book,
-                             BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateBook(@PathVariable Long id,
+                             @Valid @ModelAttribute Book book,
+                             BindingResult result,
+                             Model model,
+                             RedirectAttributes redirectAttributes) {
         book.setId(id);
 
         if(result.hasErrors()) {
             model.addAttribute("authors", authorService.getAllAuthors());
-            return  "book/form";
+            return "book/form";
         }
 
         bookService.saveBook(book);
-
         redirectAttributes.addFlashAttribute("success", "Book updated successfully!");
-        return  "redirect:/app/books";
+        return "redirect:/app/books";
     }
+
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -107,6 +108,4 @@ public class BookController {
         redirectAttributes.addFlashAttribute("success", "Book deleted successfully!");
         return "redirect:/app/books";
     }
-
-
 }

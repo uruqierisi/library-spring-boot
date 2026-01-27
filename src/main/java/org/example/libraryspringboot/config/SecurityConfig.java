@@ -5,6 +5,7 @@ import org.example.libraryspringboot.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity  // <-- Shto këtë për @PreAuthorize
 public class SecurityConfig {
 
     @Autowired
@@ -26,30 +28,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
-
-
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
-
                         .requestMatchers("/app/**", "/api/**").hasAnyRole("USER", "ADMIN")
-
-
                         .anyRequest().authenticated()
                 )
-
-
                 .formLogin(form -> form
-                        .loginPage("/login") // URL i logini
-                        .defaultSuccessUrl("/app/books", true) // ku me shku masi tbohet login succesfful
-                        .failureUrl("/login?error=true") // ku me shku nese fail
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/app/books", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
-
-
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
@@ -57,10 +47,8 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-
-
                 .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/access-denied") // access denied page me html
+                        .accessDeniedPage("/access-denied")
                 );
 
         return http.build();
