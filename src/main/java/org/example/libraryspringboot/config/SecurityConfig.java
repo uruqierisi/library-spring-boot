@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity  // <-- Shto këtë për @PreAuthorize
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired

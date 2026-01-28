@@ -21,8 +21,6 @@ public class Author {
     private String name;
 
 
-    // cascade= nese e fshina 1 author edhe librat e tij fshihen
-    // orphanRemoval = nese e fshina 1 liber prej listes fshihet edhe prej databazes
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
 
@@ -57,13 +55,11 @@ public class Author {
         this.books = books;
     }
 
-    // metoda me shtu liber prej autorit
     public void addBook(Book book){
         books.add(book);
         book.setAuthor(this);
     }
 
-    // metoda me fshi liber
     public void removeBook(Book book){
         books.remove(book);
         book.setAuthor(null);

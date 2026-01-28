@@ -54,9 +54,9 @@ public class DataInitializer implements CommandLineRunner {
             authorRepository.save(author2);
             authorRepository.save(author3);
 
-            Book book1 = new Book("Pse? ", "902342348", "Drama", author1);
-            Book book2 = new Book("Deshtaku","12345567","Drama", author2);
-            Book book3 = new Book("Pallati i endrrave", "123456345", "Fantasy", author3);
+            Book book1 = new Book("Pse? ", "9023423480", "Drama", author1);
+            Book book2 = new Book("Deshtaku","1234556789","Drama", author2);
+            Book book3 = new Book("Pallati i endrrave", "1234563459", "Fantasy", author3);
 
 
             bookRepository.save(book1);

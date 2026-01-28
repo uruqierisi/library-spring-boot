@@ -8,16 +8,14 @@
 <body>
 <div th:fragment="content">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>👨‍💼 Authors</h2>
-        <!-- Butoni "Add New Author" vetëm për ADMIN -->
+        <h2><i class="bi bi-people"></i> Authors</h2>
         <a href="/app/authors/new"
            class="btn btn-primary"
            sec:authorize="hasRole('ADMIN')">
-            ➕ Add New Author
+            <i class="bi bi-plus-circle"></i> Add New Author
         </a>
     </div>
 
-    <!-- Authors table -->
     <div class="card">
         <div class="card-body">
             <div th:if="${authors.isEmpty()}" class="text-center text-muted py-5">
@@ -41,20 +39,18 @@
                         <span class="badge bg-info" th:text="${author.books.size()}">0</span>
                     </td>
                     <td>
-                        <!-- Edit button - VETËM për ADMIN -->
                         <a th:href="@{/app/authors/edit/{id}(id=${author.id})}"
                            class="btn btn-sm btn-warning"
                            sec:authorize="hasRole('ADMIN')">
-                            ✏️ Edit
+                            <i class="bi bi-pencil"></i> Edit
                         </a>
 
-                        <!-- Delete button - TE GJITHE e shohin, por vetëm ADMIN e përdorin -->
                         <form th:action="@{/app/authors/delete/{id}(id=${author.id})}"
                               method="post"
                               class="d-inline"
                               onsubmit="return confirm('Delete this author? This will also delete all their books!');">
                             <button type="submit" class="btn btn-sm btn-danger">
-                                🗑️ Delete
+                                <i class="bi bi-trash"></i> Delete
                             </button>
                         </form>
                     </td>

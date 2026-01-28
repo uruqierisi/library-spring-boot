@@ -16,7 +16,6 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    // merri krejt librat prej db
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
@@ -45,7 +44,6 @@ public class BookService {
         return bookRepository.existsByIsbnAndIdNot(isbn, bookId);
     }
 
-    // nese searchi osht empty i kthen krejt librat
     public List<Book> searchBooks(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()){
             return getAllBooks();
